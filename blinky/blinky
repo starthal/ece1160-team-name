@@ -1,0 +1,41 @@
+
+[indentation]
+indent_width=4
+indent_type=0
+indent_hard_tab_width=8
+detect_indent=true
+detect_indent_width=true
+indent_mode=2
+
+[project]
+name=blinky
+base_path=/home/salbert/work/nrec/src/stm32/blinky
+description=
+file_patterns=
+
+[long line marker]
+long_line_behaviour=1
+long_line_column=72
+
+[files]
+current_page=1
+FILE_NAME_0=1857;Make;0;16;2;1;0;/home/salbert/work/nrec/src/stm32/blinky/Makefile;0;8
+FILE_NAME_1=2039;C;0;16;0;1;0;/home/salbert/work/nrec/src/stm32/blinky/main.c;0;2
+FILE_NAME_2=9009;C;0;16;0;1;0;/home/salbert/work/nrec/src/stm32/blinky/system_stm32f4xx.c;0;2
+FILE_NAME_3=2230;C;0;16;0;1;0;/home/salbert/work/nrec/src/stm32/Libraries/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_gpio.h;0;2
+FILE_NAME_4=11014;C;0;16;0;1;0;/home/salbert/work/nrec/src/stm32/Libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.c;0;2
+FILE_NAME_5=478;C;0;16;0;1;0;/home/salbert/work/nrec/src/stm32/Libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_tim.c;0;2
+FILE_NAME_6=4101;C;0;16;0;1;0;/home/salbert/work/nrec/src/stm32/blinky/stm32f4xx_it.c;0;2
+FILE_NAME_7=1530;C;0;16;0;1;0;/home/salbert/work/nrec/src/stm32/blinky/stm32f4xx_it.h;0;2
+FILE_NAME_8=0;C;0;16;0;1;0;/home/salbert/work/nrec/src/stm32/Libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_usart.c;0;2
+FILE_NAME_9=1256;C;0;16;0;1;0;/home/salbert/work/nrec/src/stm32/blinky/stm32f4xx_conf.h;0;2
+FILE_NAME_10=5838;C;0;0;0;1;0;/home/salbert/work/nrec/src/stm32/Libraries/CMSIS/ST/STM32F4xx/Include/stm32f4xx.h;0;2
+FILE_NAME_11=13687;None;0;16;0;1;0;/home/salbert/work/nrec/src/stm32/lib/startup/startup_stm32f4xx.s;0;3
+
+[VTE]
+last_dir=/home/salbert/Dropbox
+
+[build-menu]
+NF_03_LB=Program DIscovery Board
+NF_03_CM=make program-disc
+NF_03_WD=

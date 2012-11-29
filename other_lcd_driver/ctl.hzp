@@ -1,0 +1,53 @@
+<!DOCTYPE CrossStudio_Project_File>
+<solution version="1" Name="ATMEL AT91SAM7 CTL Examples" >
+  <configuration c_preprocessor_definitions="DEBUG" link_include_startup_code="No" gcc_optimization_level="None" build_debug_information="Yes" hidden="Yes" Name="Debug" />
+  <configuration c_preprocessor_definitions="NDEBUG" link_include_startup_code="No" gcc_optimization_level="Level 1" build_debug_information="No" hidden="Yes" Name="Release" />
+  <configuration c_preprocessor_definitions="__FLASH_BUILD" hidden="Yes" Name="Flash" />
+  <configuration c_preprocessor_definitions="__RAM_BUILD" hidden="Yes" Name="RAM" />
+  <configuration arm_library_instruction_set="ARM" c_preprocessor_definitions="__ARM" arm_instruction_set="ARM" hidden="Yes" Name="ARM" />
+  <configuration arm_library_instruction_set="THUMB" c_preprocessor_definitions="__THUMB" arm_instruction_set="THUMB" hidden="Yes" Name="THUMB" />
+  <configuration inherited_configurations="ARM;Flash;Debug" linker_printf_fp_enabled="Yes" linker_printf_fmt_level="long" Name="ARM Flash Debug" />
+  <configuration inherited_configurations="ARM;Flash;Release" link_include_startup_code="Yes" gcc_optimization_level="Level 1" Name="ARM Flash Release" />
+  <configuration inherited_configurations="ARM;RAM;Debug" Name="ARM RAM Debug" />
+  <configuration inherited_configurations="ARM;RAM;Release" Name="ARM RAM Release" />
+  <configuration inherited_configurations="THUMB;Flash;Debug" Name="THUMB Flash Debug" />
+  <configuration inherited_configurations="THUMB;Flash;Release" Name="THUMB Flash Release" />
+  <configuration inherited_configurations="THUMB;RAM;Debug" Name="THUMB RAM Debug" />
+  <configuration inherited_configurations="THUMB;RAM;Release" Name="THUMB RAM Release" />
+  <project Name="test5" >
+    <configuration Target="AT91SAM7S64" property_groups_file_path="$(StudioDir)/targets/ATMEL_AT91SAM7/propertyGroups.xml" linker_memory_map_file="$(StudioDir)/targets/ATMEL_AT91SAM7/AT91SAM7S64_MemoryMap.xml" link_use_multi_threaded_libraries="Yes" linker_additional_files="$(StudioDir)/ctl/lib/libctl$(LibExt).a" c_user_include_directories="$(StudioDir)/ctl/include" project_directory="" link_include_startup_code="No" project_type="Executable" Name="Common" />
+    <configuration target_reset_script="RAMReset()" Name="RAM" />
+    <configuration arm_target_flash_loader_file_path="$(StudioDir)/targets/ATMEL_AT91SAM7/Release/Loader.exe" target_reset_script="FLASHReset()" Name="Flash" />
+    <folder Name="Source Files" >
+      <configuration filter="c;cpp;cxx;cc;h;s;asm;inc" Name="Common" />
+      <file file_name="test_AT91SAM7EK.c" Name="test_AT91SAM7EK.c" />
+      <file file_name="test_AT91SAM7.c" Name="test_AT91SAM7.c" />
+      <file file_name="test.c" Name="test.c" />
+      <file file_name="serial.c" Name="serial.c" />
+      <file file_name="spi.c" Name="spi.c" />
+      <file file_name="pcf8833u8_lcd.c" Name="pcf8833u8_lcd.c" />
+      <file file_name="fonts.c" Name="fonts.c" />
+      <file file_name="Bitmap.c" Name="Bitmap.c" />
+    </folder>
+    <folder Name="System Files" >
+      <configuration filter="" Name="Common" />
+      <file file_name="$(StudioDir)/source/crt0.s" Name="crt0.s" />
+      <file file_name="$(StudioDir)/targets/ATMEL_AT91SAM7/AT91SAM7_Startup.s" Name="AT91SAM7_Startup.s" />
+      <file file_name="$(StudioDir)/targets/sram_placement.xml" Name="sram_placement.xml" >
+        <configuration build_exclude_from_build="Yes" Name="Flash" />
+      </file>
+      <file file_name="$(StudioDir)/targets/flash_placement.xml" Name="flash_placement.xml" >
+        <configuration build_exclude_from_build="Yes" Name="RAM" />
+      </file>
+      <file file_name="$(StudioDir)/targets/ATMEL_AT91SAM7/AT91SAM7_Target.js" Name="AT91SAM7_Target.js" >
+        <configuration Name="Common" file_type="Reset Script" />
+      </file>
+      <file file_name="$(StudioDir)/ctl/source/threads.js" Name="threads.js" />
+      <file file_name="$(StudioDir)/ctl/source/AT91SAM7.c" Name="AT91SAM7.c" >
+        <configuration arm_instruction_set="ARM" Name="Common" />
+      </file>
+    </folder>
+    <configuration link_include_startup_code="Yes" linker_printf_fp_enabled="Yes" linker_printf_fmt_level="long" Name="ARM Flash Debug" />
+    <configuration link_include_startup_code="Yes" gcc_optimization_level="None" linker_printf_fp_enabled="Yes" linker_printf_fmt_level="long" Name="ARM Flash Release" />
+  </project>
+</solution>
