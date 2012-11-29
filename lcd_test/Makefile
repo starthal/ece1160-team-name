@@ -191,7 +191,7 @@ program: all
 debug: all
 	$(CHECK)
 	@echo "[DEBUG MODE] Flashing the $(BOARD) board..."
-	@echo "[DEBUG MODE] Connect with"
+	@echo "[DEBUG MODE] Connect with gdb:"
 	@echo "	              tar rem localhost:3333"
 	@echo "	              monitor reset halt"
 	@echo "               load"
