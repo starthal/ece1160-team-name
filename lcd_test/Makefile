@@ -19,10 +19,14 @@ else
 endif
 
 TARGET:=main
-TOOLCHAIN_PATH:=/opt/sourcery/bin
-#TOOLCHAIN_PATH:=/usr/bin
+
+ifeq ($(USER),josh)
+    TOOLCHAIN_PATH:=/home/josh/CodeSourcery
+else
+    TOOLCHAIN_PATH:=/opt/sourcery/bin
+endif
+
 TOOLCHAIN_PREFIX:=arm-none-eabi
-#TOOLCHAIN_PREFIX:=arm-linux-gnueabi
 
 OPTLVL:=0 # Optimization level, can be [0, 1, 2, 3, s].
 
