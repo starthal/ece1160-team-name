@@ -4,11 +4,11 @@
 //#define WRITE_SLOW
 
 #define LCD_GPIO      GPIOB
-#define LCD_GPIO_PERIPH RCC_AHB1Periph_GPIOB
-#define GPIO_LCD_NSS  GPIO_Pin_12
-#define GPIO_LCD_SCL  GPIO_Pin_13
-#define GPIO_LCD_MOSI GPIO_Pin_15
-#define GPIO_LCD_RST  GPIO_Pin_11
+#define LCD_GPIO_CLK RCC_AHB1Periph_GPIOB
+#define LCD_NSS_PIN  GPIO_Pin_12
+#define LCD_SCL_PIN  GPIO_Pin_13
+#define LCD_MOSI_PIN GPIO_Pin_15
+#define LCD_RST_PIN  GPIO_Pin_11
 
 #define LCD_CMD      0
 #define LCD_DATA     1

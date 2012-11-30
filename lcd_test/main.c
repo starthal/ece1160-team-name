@@ -105,7 +105,7 @@ void delay(uint32_t nticks)
 void system_tick()
 {
   if (time_left != 0)
-  { 
+  {
     system_clock++;
     time_left--;
   }

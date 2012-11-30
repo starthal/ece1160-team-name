@@ -1,17 +1,11 @@
-#ifdef USE_MATH
-  #include <math.h>
-#endif
 #include "stm32f4xx.h"
 #include "lcd.h"
 #include "fonts.h"
-#include "bitmap.h"
 #include "main.h"
-//#include "nokia.h"
-//#include "defines.h"
 
 void lcd_gpio_init()
 {
-  RCC_AHB1PeriphClockCmd(LCD_GPIO_PERIPH, ENABLE);
+  RCC_AHB1PeriphClockCmd(LCD_GPIO_CLK, ENABLE);
   
   GPIO_InitTypeDef lcd_gpio_init_struct;
 
@@ -24,14 +18,14 @@ void lcd_gpio_init()
   GPIO_Init(LCD_GPIO, &lcd_gpio_init_struct);
 
   /* Enable chip */
-  GPIO_ResetBits(LCD_GPIO, GPIO_LCD_NSS);
+  GPIO_ResetBits(LCD_GPIO, LCD_NSS_PIN);
 }
 
 /* Sends a 9 bit command over SPI to the LCD */
 inline void lcd_send(uint16_t is_data, uint8_t data8)
 {
   /* Enable chip */
-  //GPIO_ResetBits(LCD_GPIO, GPIO_LCD_NSS);
+  //GPIO_ResetBits(LCD_GPIO, LCD_NSS_PIN);
 
   uint16_t data9 = data8 | (is_data << 8);
   //if (is_data)
@@ -43,13 +37,13 @@ inline void lcd_send(uint16_t is_data, uint8_t data8)
   for (j = 0; j < 9; j++)
   {
     if ((data9 & 0x100) == 0x100)
-      GPIO_SetBits(LCD_GPIO, GPIO_LCD_MOSI);
+      GPIO_SetBits(LCD_GPIO, LCD_MOSI_PIN);
     else 
-      GPIO_ResetBits(LCD_GPIO, GPIO_LCD_MOSI);
+      GPIO_ResetBits(LCD_GPIO, LCD_MOSI_PIN);
 
     /* Clock pulse */
-    GPIO_SetBits(LCD_GPIO, GPIO_LCD_SCL);
-    GPIO_ResetBits(LCD_GPIO, GPIO_LCD_SCL);
+    GPIO_SetBits(LCD_GPIO, LCD_SCL_PIN);
+    GPIO_ResetBits(LCD_GPIO, LCD_SCL_PIN);
         
     data9 <<= 1;
   }
@@ -57,11 +51,11 @@ inline void lcd_send(uint16_t is_data, uint8_t data8)
   for (j = 0; j < 9; j++)
   {
     /* Clock high */
-    uint16_t bits = GPIO_LCD_SCL | GPIO_LCD_RST;
+    uint16_t bits = LCD_SCL_PIN | LCD_RST_PIN;
     bits |= (data9 & 0x100) << 7;
     GPIO_Write(LCD_GPIO, bits);
     /* Clock low */
-    bits &= ~GPIO_LCD_SCL;
+    bits &= ~LCD_SCL_PIN;
     GPIO_Write(LCD_GPIO, bits);
 
     data9 <<= 1;
@@ -69,55 +63,55 @@ inline void lcd_send(uint16_t is_data, uint8_t data8)
 #endif
 
   /* Disable chip */
-  //GPIO_SetBits(LCD_GPIO, GPIO_LCD_NSS);  //Disable chip
+  //GPIO_SetBits(LCD_GPIO, LCD_NSS_PIN);  //Disable chip
 }
 
 inline void lcd_send_data(uint16_t data9)
 {  
-  uint16_t bits = GPIO_LCD_SCL | GPIO_LCD_RST | GPIO_LCD_MOSI;
+  uint16_t bits = LCD_SCL_PIN | LCD_RST_PIN | LCD_MOSI_PIN;
   GPIO_Write(LCD_GPIO, bits);
-  bits = GPIO_LCD_RST | GPIO_LCD_MOSI;
+  bits = LCD_RST_PIN | LCD_MOSI_PIN;
   GPIO_Write(LCD_GPIO, bits);
 
   /* Clock pulse */
-  bits = GPIO_LCD_SCL | GPIO_LCD_RST | ((data9 & (1<<7)) << 8);
+  bits = LCD_SCL_PIN | LCD_RST_PIN | ((data9 & (1<<7)) << 8);
   GPIO_Write(LCD_GPIO, bits);
-  bits &= ~GPIO_LCD_SCL;
-  GPIO_Write(LCD_GPIO, bits);
-  /* Clock pulse */
-  bits = GPIO_LCD_SCL | GPIO_LCD_RST | ((data9 & (1<<6)) << 9);
-  GPIO_Write(LCD_GPIO, bits);
-  bits &= ~GPIO_LCD_SCL;
+  bits &= ~LCD_SCL_PIN;
   GPIO_Write(LCD_GPIO, bits);
   /* Clock pulse */
-  bits = GPIO_LCD_SCL | GPIO_LCD_RST | ((data9 & (1<<5)) << 10);
+  bits = LCD_SCL_PIN | LCD_RST_PIN | ((data9 & (1<<6)) << 9);
   GPIO_Write(LCD_GPIO, bits);
-  bits &= ~GPIO_LCD_SCL;
-  GPIO_Write(LCD_GPIO, bits);
-  /* Clock pulse */
-  bits = GPIO_LCD_SCL | GPIO_LCD_RST | ((data9 & (1<<4)) << 11);
-  GPIO_Write(LCD_GPIO, bits);
-  bits &= ~GPIO_LCD_SCL;
+  bits &= ~LCD_SCL_PIN;
   GPIO_Write(LCD_GPIO, bits);
   /* Clock pulse */
-  bits = GPIO_LCD_SCL | GPIO_LCD_RST | ((data9 & (1<<3)) << 12);
+  bits = LCD_SCL_PIN | LCD_RST_PIN | ((data9 & (1<<5)) << 10);
   GPIO_Write(LCD_GPIO, bits);
-  bits &= ~GPIO_LCD_SCL;
-  GPIO_Write(LCD_GPIO, bits);
-  /* Clock pulse */
-  bits = GPIO_LCD_SCL | GPIO_LCD_RST | ((data9 & (1<<2)) << 13);
-  GPIO_Write(LCD_GPIO, bits);
-  bits &= ~GPIO_LCD_SCL;
+  bits &= ~LCD_SCL_PIN;
   GPIO_Write(LCD_GPIO, bits);
   /* Clock pulse */
-  bits = GPIO_LCD_SCL | GPIO_LCD_RST | ((data9 & (1<<1)) << 14);
+  bits = LCD_SCL_PIN | LCD_RST_PIN | ((data9 & (1<<4)) << 11);
   GPIO_Write(LCD_GPIO, bits);
-  bits &= ~GPIO_LCD_SCL;
+  bits &= ~LCD_SCL_PIN;
   GPIO_Write(LCD_GPIO, bits);
   /* Clock pulse */
-  bits = GPIO_LCD_SCL | GPIO_LCD_RST | ((data9 & 1     ) << 15);
+  bits = LCD_SCL_PIN | LCD_RST_PIN | ((data9 & (1<<3)) << 12);
   GPIO_Write(LCD_GPIO, bits);
-  bits &= ~GPIO_LCD_SCL;
+  bits &= ~LCD_SCL_PIN;
+  GPIO_Write(LCD_GPIO, bits);
+  /* Clock pulse */
+  bits = LCD_SCL_PIN | LCD_RST_PIN | ((data9 & (1<<2)) << 13);
+  GPIO_Write(LCD_GPIO, bits);
+  bits &= ~LCD_SCL_PIN;
+  GPIO_Write(LCD_GPIO, bits);
+  /* Clock pulse */
+  bits = LCD_SCL_PIN | LCD_RST_PIN | ((data9 & (1<<1)) << 14);
+  GPIO_Write(LCD_GPIO, bits);
+  bits &= ~LCD_SCL_PIN;
+  GPIO_Write(LCD_GPIO, bits);
+  /* Clock pulse */
+  bits = LCD_SCL_PIN | LCD_RST_PIN | ((data9 & 1     ) << 15);
+  GPIO_Write(LCD_GPIO, bits);
+  bits &= ~LCD_SCL_PIN;
   GPIO_Write(LCD_GPIO, bits);
 
   return;
@@ -129,9 +123,9 @@ void lcd_init()
     lcd_gpio_init();
 
   // Hardware reset
-  GPIO_ResetBits(LCD_GPIO, GPIO_LCD_RST);
+  GPIO_ResetBits(LCD_GPIO, LCD_RST_PIN);
   delay(5);
-  GPIO_SetBits(LCD_GPIO, GPIO_LCD_RST);
+  GPIO_SetBits(LCD_GPIO, LCD_RST_PIN);
   delay(5);
   
   // Sleep out (command 0x11)
