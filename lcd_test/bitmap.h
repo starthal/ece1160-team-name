@@ -1,2 +1,1 @@
-extern const char smiley[26138];
-extern const char sparkfun[6206];
+extern const char test[26138];

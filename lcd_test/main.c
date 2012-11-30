@@ -2,17 +2,14 @@
 
 #include "stm32f4xx.h"
 #include "lcd.h"
+#include "main.h"
 
-#define DLY_100US  1000
+
 /* Status LED definitions */
 
 #define STATUS_LED_PIN      GPIO_Pin_6 | GPIO_Pin_12
 #define STATUS_LED_GPIO     GPIOD
 #define STATUS_LED_GPIO_CLK RCC_AHB1Periph_GPIOD
-
-#define STATUS_LED_PATTERN_OK   0xAAAA    /*1010 1010 1010 1010*/
-#define STATUS_LED_PATTERN_ERR  0xA800    /*1010 1000 0000 0000*/
-#define STATUS_LED_UPDATE_MS    100
 
 void system_tick();
 void delay(uint32_t nTime);
@@ -23,6 +20,8 @@ volatile uint32_t system_clock = 0;
 volatile uint32_t time_left;
 volatile uint16_t status_led_pattern = STATUS_LED_PATTERN_OK;
 RCC_ClocksTypeDef RCC_Clocks;
+
+#include "bitmap.c"
 
 int main(void)
 {  
@@ -49,22 +48,37 @@ int main(void)
   /* Send init commands */
 
   status_led_pattern = STATUS_LED_PATTERN_ERR;
-  lcd_init();
-  //lcd_cls();
-
-  delay(100);
-
-  LCD_Box(50, 30, 30, 50, RED);
-  delay(50);
-
   status_led_pattern = STATUS_LED_PATTERN_OK;
 
+  delay(50);
+  lcd_init();
+  delay(50);
+  int i, j;
+  
+  lcd_fill(BLACK);
+  lcd_fill(WHITE);
+    
+  for (i = 50; i < 100; i++)
+  for (j = 50; j < 100; j++)
+  {
+    lcd_set_pixel(i, j, BLACK);
+  }
+
+
   delay(100);
+
+while(1)
+{
+  lcd_bitmap(pitt);
+  delay(100);
+  lcd_bitmap(arrow_up);
+  delay(100);
+}
   //status_led_pattern = STATUS_LED_PATTERN_ERR;
   
   while(1)
   {
-    DelayResolution100us(4000);
+    DelayResolution100us(10);
   }
   return 0;
 }

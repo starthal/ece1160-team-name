@@ -28,7 +28,7 @@ endif
 
 TOOLCHAIN_PREFIX:=arm-none-eabi
 
-OPTLVL:=0 # Optimization level, can be [0, 1, 2, 3, s].
+OPTLVL:=fast # Optimization level, can be [0, 1, 2, 3, s].
 
 #PROJECT_NAME:=$(notdir $(lastword $(CURDIR)))
 TOP:=$(shell readlink -f "..")
@@ -43,9 +43,9 @@ INCLUDE=-I$(CURDIR)
 INCLUDE+=-I$(STMLIB)/core
 INCLUDE+=-I$(STMLIB)/stm32f4/inc
 INCLUDE+=-I$(STD_PERIPH)/inc
-INCLUDE+=-I$(STMLIB)/STM32_USB_OTG_Driver/inc
-INCLUDE+=-I$(STMLIB)/STM32_USB_Device_Library/Class/cdc/inc
-INCLUDE+=-I$(STMLIB)/STM32_USB_Device_Library/Core/inc
+#INCLUDE+=-I$(STMLIB)/STM32_USB_OTG_Driver/inc
+#INCLUDE+=-I$(STMLIB)/STM32_USB_Device_Library/Class/cdc/inc
+#INCLUDE+=-I$(STMLIB)/STM32_USB_Device_Library/Core/inc
 
 # vpath is used so object files are written to the current directory instead
 # of the same directory as their source files
@@ -86,13 +86,13 @@ SRC+=stm32f4xx_gpio.c
 SRC+=stm32f4xx_rcc.c
 SRC+=stm32f4xx_usart.c
 SRC+=misc.c
-SRC+=stm32f4xx_flash.c
+#SRC+=stm32f4xx_flash.c
 #SRC+=stm32f4xx_adc.c
 #SRC+=stm32f4xx_dac.c
 #SRC+=stm32f4xx_dma.c
 #SRC+=stm32f4xx_exti.c
 SRC+=stm32f4xx_i2c.c
-SRC+=stm32f4xx_spi.c
+#SRC+=stm32f4xx_spi.c
 #SRC+=stm32f4xx_tim.c
 #SRC+=drv_glcd.c
 #SRC+=glcd_ll.c
@@ -171,6 +171,7 @@ clean:
 	rm -f $(TARGET)_$(BOARD).elf
 	rm -f $(TARGET)_$(BOARD).hex
 	rm -f $(TARGET)_$(BOARD).bin
+	rm -f $(OBJDIR)/*.o
 
 # ************************************************
 # FLASH PROGRAMMING
