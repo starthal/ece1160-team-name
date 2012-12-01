@@ -5,11 +5,19 @@
 #include <string.h>
 
 
-#define OUTPUT_BINARY
+#define OUTPUT_LENGTH
 
 #define SIDE_PX (132)
+
+//Make sure 12-bit is not defined if using OUTPUT_LENGTH
 #ifdef DEPTH_12
-  #define NUM_BYTES (SIDE_PX*SIDE_PX/2*3)
+ #ifdef OUTPUT_LENGTH
+  #undef DEPTH_12
+ #endif
+#endif
+
+#ifdef DEPTH_12
+   #define NUM_BYTES (SIDE_PX*SIDE_PX/2*3)
 #else
   #define NUM_BYTES (SIDE_PX*SIDE_PX)
 #endif
@@ -101,19 +109,39 @@ int main(int argc, char** argv)
 
 fclose(fp_in);
 
-#ifdef OUTPUT_BINARY
-
-#else
   FILE *fp_out = stdout; //fopen(argv[2], "w");
-
-  fprintf(fp_out, "uint8_t %s[%d] = \n", argv[2], NUM_BYTES);
+#ifdef OUTPUT_BINARY
+  //Binary output not implemented
+#else
+  fprintf(fp_out, "uint8_t %s[] = \n", argv[2]);
   fprintf(fp_out, "{\n  ");
+#ifdef OUTPUT_LENGTH
+  //Output using run length encoding
+  int length;
+ 
+  for (i = 0; i < NUM_BYTES; i++)
+  {
+    length = 1;
+    while(img_out[i] == img_out[i+1])
+    {
+      i++;
+      length++;
+      if(!(i < NUM_BYTES) || !(length < 255)) break;
+    }
+
+    fprintf(fp_out, "0x%0.2x,",length);
+    fprintf(fp_out, "0x%0.2x,", img_out[i]);
+  }
+  fprintf(fp_out, "0x00,");
+#else
+  //Output hex based char array
   for (i = 0; i < NUM_BYTES; i++)
   {
     fprintf(fp_out, "0x%0.2x,", img_out[i]);
     if (i % BYTES_PER_LINE == (BYTES_PER_LINE - 1))
       fprintf(fp_out, "\n  ");
   }
+#endif
   fprintf(fp_out, "\n};\n");
   return 0;
 #endif
