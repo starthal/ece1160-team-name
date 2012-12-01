@@ -4,10 +4,7 @@
 #include "stm32f4xx.h"
 #include "lcd.h"
 #include "fonts.h"
-#include "bitmap.h"
 #include "main.h"
-//#include "nokia.h"
-//#include "defines.h"
 
 void lcd_gpio_init()
 {
@@ -125,8 +122,7 @@ inline void lcd_send_data(uint16_t data9)
 
 void lcd_init()
 {
-    uint8_t i;
-    lcd_gpio_init();
+  lcd_gpio_init();
 
   // Hardware reset
   GPIO_ResetBits(LCD_GPIO, LCD_RST_PIN);
@@ -137,7 +133,7 @@ void lcd_init()
   // Sleep out (command 0x11)
   lcd_send(LCD_CMD, SLEEPOUT);
   
-  // Inversion on (command 0x20)
+  // Inversion off
   lcd_send(LCD_CMD, INVOFF);
   
   // Color Interface Pixel Format
@@ -200,7 +196,7 @@ void lcd_fill(uint16_t color)
   }
 }
 
-void lcd_bitmap(uint8_t *data)
+void lcd_bitmap_r132(uint8_t *data)
 {
   /* Set work area */
   lcd_send(LCD_CMD, PASET);
@@ -213,9 +209,40 @@ void lcd_bitmap(uint8_t *data)
   uint32_t i;
 
   lcd_send(LCD_CMD, RAMWR);
+#ifdef DEPTH_12
   for (i = 0; i < (132*132)/2*3; i++)
   {
     //lcd_send(LCD_DATA, data[i]);
+    lcd_send_data(data[i]);
+  }
+#else
+  for (i = 0; i < (132*132); i+=2)
+  {
+    uint16_t c1 = data[i] << 4;
+    uint16_t c2 = data[i+1] << 4;
+    
+    lcd_send_data((c1 >> 4) & 0xFF);
+    lcd_send_data(((c1 & 0x0F) << 4) | ((c2 >> 8) & 0x0F));
+    lcd_send_data(c2 & 0xFF);
+  }
+  
+#endif
+}
+
+void lcd_bitmap_r66(uint8_t* data)
+{
+  /* Set work area */
+  lcd_send(LCD_CMD, PASET);
+  lcd_send(LCD_DATA, 33);
+  lcd_send(LCD_DATA, 98);
+  lcd_send(LCD_CMD, CASET);
+  lcd_send(LCD_DATA, 33);
+  lcd_send(LCD_DATA, 98);
+  uint32_t i;
+
+  lcd_send(LCD_CMD, RAMWR);
+  for (i = 0; i < (66*66)/2*3; i++)
+  {
     lcd_send_data(data[i]);
   }
 }

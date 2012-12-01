@@ -10,6 +10,8 @@
 #define LCD_MOSI_PIN GPIO_Pin_15
 #define LCD_RST_PIN  GPIO_Pin_11
 
+#define SIDE_PX 66
+
 #define LCD_CMD      0
 #define LCD_DATA     1
 
@@ -83,7 +85,8 @@ void lcd_send(uint16_t is_data, uint8_t data8);
 void lcd_goto_pixel(uint8_t  x, uint8_t  y);
 void lcd_set_pixel(uint8_t  x, uint8_t  y, uint8_t  color);
 void lcd_fill(uint16_t color);
-void lcd_bitmap(uint8_t *data);
+void lcd_bitmap_r132(uint8_t *data);
+void lcd_bitmap_r66(uint8_t *data);
 
 void clk_delay();
 

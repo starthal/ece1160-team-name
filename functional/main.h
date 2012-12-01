@@ -1,6 +1,7 @@
 #ifndef __MAIN_H
 #define __MAIN_H
 
+void system_tick();
 void delay(uint32_t nticks);
 extern volatile uint16_t status_led_pattern;
 

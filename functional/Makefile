@@ -28,7 +28,7 @@ endif
 
 TOOLCHAIN_PREFIX:=arm-none-eabi
 
-OPTLVL:=fast # Optimization level, can be [0, 1, 2, 3, s].
+OPTLVL:=3 # Optimization level, can be [0, 1, 2, 3, s].
 
 #PROJECT_NAME:=$(notdir $(lastword $(CURDIR)))
 TOP:=$(shell readlink -f "..")
@@ -36,8 +36,7 @@ STMLIB:=$(TOP)/lib
 STD_PERIPH:=$(STMLIB)/periph
 STARTUP:=$(STMLIB)/startup
 LINKER_SCRIPT:=$(STMLIB)/ld/stm32_flash.ld
-LIBC:=/usr/arm-linux-gnueabi/lib/libc.a
-#LIBC:=/opt/sourcery/arm-none-eabi/lib/libc.a
+LIBC:=$(TOOLCHAIN_PATH)/../arm-none-eabi/lib/libc.a
 
 INCLUDE=-I$(CURDIR)
 INCLUDE+=-I$(STMLIB)/core
@@ -51,12 +50,14 @@ INCLUDE+=-I$(STD_PERIPH)/inc
 # of the same directory as their source files
 vpath %.c $(STD_PERIPH)/src \
 	$(STMLIB)/stm32f4/src \
-	$(STMLIB)/STM32_USB_OTG_Driver/src \
-	$(STMLIB)/STM32_USB_Device_Library/Class/cdc/src \
-	$(STMLIB)/STM32_USB_Device_Library/Core/src \
 	$(OBJDIR)
 vpath %.s $(STARTUP) \
 	$(OBJDIR)
+
+#	$(STMLIB)/STM32_USB_OTG_Driver/src \
+#	$(STMLIB)/STM32_USB_Device_Library/Class/cdc/src \
+#	$(STMLIB)/STM32_USB_Device_Library/Core/src \
+
 
 ASRC=startup_stm32f4xx.s
 
@@ -65,17 +66,8 @@ SRC+=main.c
 SRC+=stm32f4xx_it.c
 SRC+=system_stm32f4xx.c
 SRC+=lcd.c
+SRC+=action.c
 #SRC+=usart.c
-#SRC+=rf.c
-#SRC+=bluetooth.c
-#SRC+=zigbee.c
-#SRC+=w_utils.c
-#SRC+=host.c
-#SRC+=client.c
-#SRC+=usb_bsp.c
-#SRC+=usbd_desc.c
-#SRC+=usbd_usr.c
-#SRC+=vcp.c
 
 #Newlib stubs for printf, etc
 #SRC+=newlib_stubs.c
@@ -94,9 +86,6 @@ SRC+=misc.c
 SRC+=stm32f4xx_i2c.c
 #SRC+=stm32f4xx_spi.c
 #SRC+=stm32f4xx_tim.c
-#SRC+=drv_glcd.c
-#SRC+=glcd_ll.c
-#SRC+=Terminal_9_12x6.c
 
 # USB Source Files
 #SRC+=usb_dcd_int.c
@@ -185,7 +174,7 @@ OPENOCD = openocd
 # specify OpenOCD configuration file
 OPENOCD_CFG_PREFIX = ../openocd
 
-# program the AT91SAM7S256 internal flash memory
+# program the internal flash memory
 program: all
 	$(CHECK)
 	@echo "Flashing the $(BOARD) board..."

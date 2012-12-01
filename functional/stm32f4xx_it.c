@@ -24,6 +24,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx.h"
 #include "stm32f4xx_it.h"
+#include "main.h"
 //#include "main.h"
 //#include "usb_core.h"
 //#include "usbd_core.h"
@@ -147,9 +148,6 @@ void PendSV_Handler(void)
   */
 void SysTick_Handler(void)
 {
-  uint8_t *buf;
-  uint8_t temp1, temp2 = 0x00;
-
   /* Located in main.c */
   system_tick();
 }
