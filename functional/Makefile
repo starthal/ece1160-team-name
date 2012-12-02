@@ -21,7 +21,7 @@ endif
 TARGET:=main
 
 ifeq ($(USER),josh)
-    TOOLCHAIN_PATH:=/home/josh/CodeSourcery
+    TOOLCHAIN_PATH:=/home/josh/CodeSourcery/Sourcery_CodeBench_Lite_for_ARM_EABI/bin
 else
     TOOLCHAIN_PATH:=/opt/sourcery/bin
 endif
