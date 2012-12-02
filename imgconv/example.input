@@ -1,0 +1,10 @@
+menuitem ICON ACTNUM
+action TYPE PIN VALU TIME
+
+menuitem uparrow.bin 2
+action time 9 4096 10
+action time 9 4096 10
+menuitem downarrow.bin 1
+action moment 3 4096 4
+----
+

@@ -4,7 +4,7 @@
 #include <inttypes.h>
 #include <string.h>
 
-
+#define OUTPUT_BINARY
 #define OUTPUT_LENGTH
 
 #define SIDE_PX (132)
@@ -32,7 +32,7 @@ int main(int argc, char** argv)
   int width, height;
   char buf[512] = "xxx";
 
-  if (argc != 3)
+  if (argc < 2)
   {
     fprintf(stderr, "need input and output\n");
     return 1;
@@ -110,15 +110,15 @@ int main(int argc, char** argv)
 fclose(fp_in);
 
   FILE *fp_out = stdout; //fopen(argv[2], "w");
-#ifdef OUTPUT_BINARY
-  //Binary output not implemented
-#else
+  #ifndef OUTPUT_BINARY
   fprintf(fp_out, "uint8_t %s[] = \n", argv[2]);
   fprintf(fp_out, "{\n  ");
+  #endif
+
 #ifdef OUTPUT_LENGTH
   //Output using run length encoding
   int length;
- 
+
   for (i = 0; i < NUM_BYTES; i++)
   {
     length = 1;
@@ -128,9 +128,13 @@ fclose(fp_in);
       length++;
       if(!(i < NUM_BYTES) || !(length < 255)) break;
     }
-
+    #ifdef OUTPUT_BINARY
+    fwrite(&length, 1, 1, fp_out);
+    fwrite(&img_out[i], 1, 1, fp_out);
+    #else
     fprintf(fp_out, "0x%0.2x,",length);
     fprintf(fp_out, "0x%0.2x,", img_out[i]);
+    #endif
   }
   fprintf(fp_out, "0x00,");
 #else
@@ -142,9 +146,12 @@ fclose(fp_in);
       fprintf(fp_out, "\n  ");
   }
 #endif
-  fprintf(fp_out, "\n};\n");
-  return 0;
-#endif
 
-  //fclose(fp_out);
+  #ifndef OUTPUT_BINARY
+  fprintf(fp_out, "\n};\n");
+  #endif
+
+
+  fclose(fp_out);
+  return 0;
 }

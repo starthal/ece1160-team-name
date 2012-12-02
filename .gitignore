@@ -4,7 +4,7 @@
 *.hex
 *.elf
 *.bin
-imgconv
+imgconv/imgconv
 
 # Logs and databases #
 ######################

@@ -114,7 +114,7 @@ int main(void)
     /* Wait for button press */
     uint32_t time1 = system_clock;
     while (system_clock - time1 < 100)
-    {
+    { 
       //bval = GPIO_ReadInputDataBit(BUTTON_GPIO, BUTTON_PIN);
       if (1) //bval == 0 && bval_old == 1)
       {
@@ -136,8 +136,8 @@ int main(void)
       }
       bval_old = bval;
     }
-    lcd_fill(BLACK);
-    action_next();
+    //lcd_fill(BLACK);
+    //action_next();
   }
 
 
