@@ -6,6 +6,9 @@
 #include "fonts.h"
 #include "main.h"
 
+/* 17.4 KB */
+uint8_t img_buf[132*132];
+
 void lcd_gpio_init()
 {
   RCC_AHB1PeriphClockCmd(LCD_GPIO_CLK, ENABLE);
@@ -138,7 +141,11 @@ void lcd_init()
   
   // Color Interface Pixel Format
   lcd_send(LCD_CMD, COLMOD);
+  #ifdef DEPTH_12
   lcd_send(LCD_DATA, (0x03)); // 0x03 = 12 bits-per-pixel
+  #else
+  lcd_send(LCD_DATA, (0x20)); // 8 bpp
+  #endif
   
   // Memory access controler
   lcd_send(LCD_CMD, MADCTL);
@@ -196,6 +203,27 @@ void lcd_fill(uint16_t color)
   }
 }
 
+
+void lcd_bitmap_rle(uint8_t* data)
+{
+  uint32_t i = 0, j = 0;
+  uint8_t color = 0;
+  uint8_t length = 1;
+  
+  while (length != 0 && i < (132*132))
+  {
+    color = data[i];
+    length = data[i+1];
+    for (j = 0; j < length; j++)
+    {
+      img_buf[j++] = color;
+    }
+    i+=2;
+  }
+
+  lcd_bitmap_r132(img_buf);
+}
+
 void lcd_bitmap_r132(uint8_t *data)
 {
   /* Set work area */
@@ -216,14 +244,16 @@ void lcd_bitmap_r132(uint8_t *data)
     lcd_send_data(data[i]);
   }
 #else
-  for (i = 0; i < (132*132); i+=2)
+  for (i = 0; i < (132*132); i+=1)
   {
-    uint16_t c1 = data[i] << 4;
-    uint16_t c2 = data[i+1] << 4;
+    //uint16_t c1 = data[i] << 4;
+    //uint16_t c2 = data[i+1] << 4;
     
-    lcd_send_data((c1 >> 4) & 0xFF);
-    lcd_send_data(((c1 & 0x0F) << 4) | ((c2 >> 8) & 0x0F));
-    lcd_send_data(c2 & 0xFF);
+    //lcd_send_data((c1 >> 4) & 0xFF);
+    //lcd_send_data(((c1 & 0x0F) << 4) | ((c2 >> 8) & 0x0F));
+    //lcd_send_data(c2 & 0xFF);
+
+    lcd_send_data(data[i]);
   }
   
 #endif
