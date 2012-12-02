@@ -3,13 +3,13 @@
 #include "action.h"
 
 #include "bitmap.c"
-//uint8_t *bitmaps[4] = {arrow_rt, arrow_up, arrow_lt, arrow_dn};
-uint8_t num_items = 4;
+
+uint8_t num_items = sizeof(icons) / sizeof(uint8_t *);
 int ind = 0;
 
 void action_disp()
 {
-  lcd_bitmap_r132(icons[ind]);
+  lcd_bitmap_rle(icons[ind]);
 }
 
 void action_next()

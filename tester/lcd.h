@@ -61,7 +61,7 @@
 #define DF8COLOR 0xC6 // set divider frequency 8-color mode
 #define SETBS 0xC7 // set bias system
 #define RDTEMP 0xC8 // temperature read back
-#define NLI 0xC9 // n-line inversion
+#define NLI 0xC9 // n-line inversion#define RDID1
 #define RDID1 0xDA
 #define RDID2 0xDB
 #define RDID3 0xDC // read ID3

@@ -6,9 +6,6 @@
 #include "fonts.h"
 #include "main.h"
 
-/* 17.4 KB */
-uint8_t img_buf[132*132];
-
 void lcd_gpio_init()
 {
   RCC_AHB1PeriphClockCmd(LCD_GPIO_CLK, ENABLE);
@@ -141,56 +138,7 @@ void lcd_init()
   
   // Color Interface Pixel Format
   lcd_send(LCD_CMD, COLMOD);
-  #ifdef DEPTH_12
   lcd_send(LCD_DATA, (0x03)); // 0x03 = 12 bits-per-pixel
-  #else
-  lcd_send(LCD_DATA, (0x02)); // 8 bpp
-  #endif
-  
-  #ifndef DEPTH_12
-  lcd_send(LCD_CMD, RGBSET);
-  lcd_send(LCD_DATA, 0);
-  lcd_send(LCD_DATA, 2);
-  lcd_send(LCD_DATA, 5);
-  lcd_send(LCD_DATA, 7);
-  lcd_send(LCD_DATA, 9);
-  lcd_send(LCD_DATA, 11);
-  lcd_send(LCD_DATA, 14);
-  lcd_send(LCD_DATA, 16);
-  lcd_send(LCD_DATA, 0);
-  lcd_send(LCD_DATA, 2);
-  lcd_send(LCD_DATA, 5);
-  lcd_send(LCD_DATA, 7);
-  lcd_send(LCD_DATA, 9);
-  lcd_send(LCD_DATA, 11);
-  lcd_send(LCD_DATA, 14);
-  lcd_send(LCD_DATA, 16);
-  lcd_send(LCD_DATA, 0);
-  lcd_send(LCD_DATA, 6);
-  lcd_send(LCD_DATA, 11);
-  lcd_send(LCD_DATA, 15);
-  // Define Color Table (command 0x2D)
-  // red 000 value
-  // red 001 value
-  // red 010 value
-  // red 011 value
-  // red 100 value
-  // red 101 value
-  // red 110 value
-  // red 111 value
-  // green 000 value
-  // green 001 value
-  // green 010 value
-  // green 011 value
-  // green 100 value
-  // green 101 value
-  // green 110 value
-  // green 111 value
-  // blue 000 value
-  // blue 001 value
-  // blue 010 value
-  // blue 011 value
-  #endif
   
   // Memory access controler
   lcd_send(LCD_CMD, MADCTL);
@@ -203,7 +151,6 @@ void lcd_init()
   
   // Display On (command 0x29)
   lcd_send(LCD_CMD, DISPON);
-
 
 }
 
@@ -249,27 +196,6 @@ void lcd_fill(uint16_t color)
   }
 }
 
-
-void lcd_bitmap_rle(uint8_t* data)
-{
-  uint32_t i = 0, j = 0, k;
-  uint8_t color = 0;
-  uint8_t length = 1;
-  
-  while (length != 0 && i < (132*132))
-  {
-    length = data[i];
-    color = data[i+1];
-    for (k = 0; k < length; k++)
-    {
-      img_buf[j++] = color;
-    }
-    i+=2;
-  }
-
-  lcd_bitmap_r132(img_buf);
-}
-
 void lcd_bitmap_r132(uint8_t *data)
 {
   /* Set work area */
@@ -290,16 +216,14 @@ void lcd_bitmap_r132(uint8_t *data)
     lcd_send_data(data[i]);
   }
 #else
-  for (i = 0; i < (132*132); i+=1)
+  for (i = 0; i < (132*132); i+=2)
   {
-    //uint16_t c1 = data[i] << 4;
-    //uint16_t c2 = data[i+1] << 4;
+    uint16_t c1 = data[i] << 4;
+    uint16_t c2 = data[i+1] << 4;
     
-    //lcd_send_data((c1 >> 4) & 0xFF);
-    //lcd_send_data(((c1 & 0x0F) << 4) | ((c2 >> 8) & 0x0F));
-    //lcd_send_data(c2 & 0xFF);
-
-    lcd_send_data(data[i]);
+    lcd_send_data((c1 >> 4) & 0xFF);
+    lcd_send_data(((c1 & 0x0F) << 4) | ((c2 >> 8) & 0x0F));
+    lcd_send_data(c2 & 0xFF);
   }
   
 #endif

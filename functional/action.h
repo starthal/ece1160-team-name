@@ -17,4 +17,8 @@ typedef struct menuitem_s
   struct menuitem_s *next;
 } menuitem_t;
 
+void action_disp();
+
+void action_next();
+
 #endif
