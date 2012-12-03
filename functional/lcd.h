@@ -87,6 +87,7 @@ void lcd_set_pixel(uint8_t  x, uint8_t  y, uint8_t  color);
 void lcd_fill(uint16_t color);
 void lcd_bitmap_r132(uint8_t *data);
 void lcd_bitmap_r66(uint8_t *data);
+void lcd_bitmap_rle(uint8_t* data);
 
 void clk_delay();
 

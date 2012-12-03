@@ -4,6 +4,7 @@
 #include "lcd.h"
 #include "main.h"
 #include "action.h"
+#include "device.h"
 
 
 /* Status LED definitions */
@@ -26,14 +27,11 @@ volatile uint32_t time_left;
 volatile uint16_t status_led_pattern = STATUS_LED_PATTERN_OK;
 RCC_ClocksTypeDef RCC_Clocks;
 
-
-
 int main(void)
 {  
   time_left = 0;
 
   /* Initialization sequences --------------------------------------- */
-  {
   /* SysTick end of count event each 10ms */
   RCC_GetClocksFreq(&RCC_Clocks);
   SystemInit();
@@ -58,31 +56,7 @@ int main(void)
   button_gpio_init.GPIO_PuPd = GPIO_PuPd_NOPULL;
   button_gpio_init.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_Init(BUTTON_GPIO, &button_gpio_init);
-}
-
-  /* i2c init */
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1, ENABLE);
-
-  /* Set up GPIOB alternate function */
-  GPIO_InitTypeDef i2c_gpio_init_struct;
-  i2c_gpio_init_struct.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
-  i2c_gpio_init_struct.GPIO_Mode = GPIO_Mode_AF;
-  i2c_gpio_init_struct.GPIO_PuPd = GPIO_PuPd_UP;
-  i2c_gpio_init_struct.GPIO_Speed = GPIO_Speed_100MHz;
-  GPIO_Init(GPIOB, &i2c_gpio_init_struct);
   
-  I2C_InitTypeDef i2c_init_struct;
-  i2c_init_struct.I2C_Mode = I2C_Mode_I2C;
-  i2c_init_struct.I2C_DutyCycle = I2C_DutyCycle_2;
-  i2c_init_struct.I2C_ClockSpeed = 90000;
-  i2c_init_struct.I2C_OwnAddress1 = 0x42;
-  i2c_init_struct.I2C_Ack = I2C_Ack_Enable;
-  i2c_init_struct.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
-  
-  I2C_Cmd(I2C1, ENABLE);
-  I2C_Init(I2C1, &i2c_init_struct);
-  
-  /* Send init commands */
 
   status_led_pattern = STATUS_LED_PATTERN_OK;
 
@@ -94,20 +68,28 @@ int main(void)
 
   uint8_t bval = 0, bval_old = 0;
 
-  //menuitem_t *main_menu;
-  //main_menu->function = action_pitt;
-  //main_menu->next = 
-  //action_disp();
+  //action_next();
 
-  action_next();
+  i2c1_init();
 
+  while (1)
+  {
+    uint8_t addr = DRIVER_ADDR_ALLCALL; //led driver All Call
 
-#define DRIVER_ADDR_ALLCALL 0xE0
-#define DRIVER_ALLCALLADDR 0x05
-#define DRIVER_LED0_ON_H 0x07
-#define DRIVER_LED0_ON_L 0x08
-#define DRIVER_LED0_OFF_H 0x09
-#define DRIVER_LED0_OFF_L 0x0A
+    i2c_start(I2C1, addr, I2C_Direction_Transmitter);
+    i2c_write(I2C1, DRIVER_LED0_ON_H);
+    i2c_write(I2C1, 0x1F);
+    i2c_stop(I2C1);
+    
+    i2c_start(I2C1, addr, I2C_Direction_Transmitter);
+    i2c_write(I2C1, DRIVER_LED0_OFF_H);
+    i2c_write(I2C1, 0x00);
+    i2c_stop(I2C1);
+    
+    I2C_GenerateSTOP(I2C1, ENABLE);
+
+    delay(2);
+  }
 
   while(1)
   {
@@ -120,19 +102,6 @@ int main(void)
       {
         /* Do some i2c shit */
         
-        uint8_t addr = DRIVER_ADDR_ALLCALL; //led driver All Call
-        I2C_GenerateSTART(I2C1, ENABLE);
-
-        I2C_Send7bitAddress(I2C1, addr, I2C_Direction_Transmitter);
-        I2C_SendData(I2C1, DRIVER_LED0_ON_H);
-        I2C_SendData(I2C1, 0x1F);
-        I2C_SendData(I2C1, DRIVER_LED0_OFF_H);
-        I2C_SendData(I2C1, 0x00);
-        
-        I2C_GenerateSTOP(I2C1, ENABLE);
-
-        delay(10);
-      
       }
       bval_old = bval;
     }
