@@ -1,24 +1,32 @@
-#ifndef __ACTION_H
-#define __ACTION_H
+#ifndef __FUNCTION_H
+#define __FUNCTION_H
 
-#include "stm32f4xx.h"
+typedef enum
+{
+  ACTION_SET_PIN_TIME,
+  ACTION_SET_PIN_MOMENT,
+  ACTION_SET_PIN_PERM,
+  NUM_ACTION_TYPES,
+} action_type_t;
 
+
+
+//set pin 9 time 3
 
 typedef struct action_s
 {
-  uint8_t* image;
-  uint8_t is_action;
-  struct menuitem_s* menuitem;
+  /* Action variables */
+  action_type_t action_type;
+  uint8_t pin; /* 0 - 16 */
+  uint16_t value; /* 12-bit */
+  uint32_t time; /* units of 10ms */
 } action_t;
 
 typedef struct menuitem_s
 {
-  struct action_s function;
-  struct menuitem_s *next;
+  //uint32_t actions_offset;
+  action_t actions[12];
+  uint32_t icon_offset;
 } menuitem_t;
-
-void action_disp();
-
-void action_next();
 
 #endif

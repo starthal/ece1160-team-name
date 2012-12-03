@@ -1,0 +1,5 @@
+menu_item arrow_up 2
+action time 9 4096 10
+action time 3 4096 10
+menu_item arrow_down 1
+action moment 3 4096 4

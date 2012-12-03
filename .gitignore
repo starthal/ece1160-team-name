@@ -5,6 +5,8 @@
 *.elf
 *.bin
 imgconv/imgconv
+bin/
+out/
 
 # Logs and databases #
 ######################
