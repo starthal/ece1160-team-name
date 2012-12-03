@@ -5,13 +5,13 @@
 #include <inttypes.h>
 #include "action.h"
 
-int main(int argc, char** argv)
+uint32_t main(uint32_t argc, char** argv)
 {
   char buf[512] = "xxx";
   char label[512] = "xxx";
   char type[512] = "xxx";
-  int num_menu = 0, num_action = 0;
-  int num_action_tot, i, pin, pwm, time;
+  uint32_t num_menu = 0, num_action = 0;
+  uint32_t num_action_tot, i, pin, pwm, time;
 
   if (argc != 3)
   {
@@ -64,18 +64,19 @@ int main(int argc, char** argv)
  rewind(fp_in);
 
  FILE *fp_out = fopen(argv[2], "w");
- fwrite(&num_menu, sizeof(int), 1, fp_out);	// write number of menu items
+ fwrite(&num_menu, sizeof(uint32_t), 1, fp_out);	// write number of menu items
 
  FILE *img_out = tmpfile(); // Buffer file to store image binaries
- FILE *img;	// Points to the current image
+ FILE *img;	// Pouint32_ts to the current image
  char byte_buf;
 
- int img_off = 2*num_menu + num_action_tot; //image offset
+ uint32_t img_off; //image offset
 
  FILE *act_out = tmpfile(); // Buffer file for actions
 
  while(1)
  {
+  img_off = 0;
   fgets(buf,512,fp_in);
   if(feof(fp_in)) break; //Check for EOF
 
@@ -96,11 +97,11 @@ int main(int argc, char** argv)
   fclose(img);
 
   //Write out menu_item
-  fwrite(&img_off, sizeof(int), 1, fp_out);
-  fwrite(&num_action, sizeof(int), 1, fp_out);
+  fwrite(&img_off, sizeof(uint32_t), 1, fp_out);
+  fwrite(&num_action, sizeof(uint32_t), 1, fp_out);
 
   //Parse actions
-  int type_id;
+  uint32_t type_id;
   for(i =0; i < num_action; i++)
   {
    fgets(buf, 512, fp_in);
@@ -116,10 +117,10 @@ int main(int argc, char** argv)
              }
    printf("Type id of %s is %d\n", type, type_id);
 
-   fwrite(&type_id, sizeof(int), 1, act_out);
-   fwrite(&pin, sizeof(int), 1, act_out);
-   fwrite(&pwm, sizeof(int), 1, act_out);
-   fwrite(&time, sizeof(int), 1, act_out);
+   fwrite(&type_id, sizeof(uint32_t), 1, act_out);
+   fwrite(&pin, sizeof(uint32_t), 1, act_out);
+   fwrite(&pwm, sizeof(uint32_t), 1, act_out);
+   fwrite(&time, sizeof(uint32_t), 1, act_out);
   }
  }
  fclose(fp_in);
