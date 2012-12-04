@@ -1,7 +1,10 @@
+all: bingen binread
+
 bingen:
 	gcc -obin/bingen bingen.c
 
 binread:
 	gcc -obin/binread binread.c
 
-all: bingen binread
+clean:
+	rm bin/bingen bin/binread

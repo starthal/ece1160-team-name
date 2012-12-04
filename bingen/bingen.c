@@ -6,18 +6,14 @@
 #include <stdlib.h>
 #include "action.h"
 
-uint32_t main(uint32_t argc, char** argv)
+int main(int argc, char** argv)
 {
   char buf[512] = "xxx";
   char label[512] = "xxx";
   char type[512] = "xxx";
   uint32_t num_menu = 0, num_action = 0;
-<<<<<<< HEAD
   uint32_t num_action_tot = 0;
   uint32_t i, pin, pwm, time;
-=======
-  uint32_t num_action_tot, i, pin, pwm, time;
->>>>>>> ca0f99fbb4d987681885badb1ea0332558cc339d
 
   if (argc != 3)
   {
@@ -50,7 +46,6 @@ uint32_t main(uint32_t argc, char** argv)
     num_menu++;
     num_action_tot += num_action;
 
-<<<<<<< HEAD
     for(i = 0; i < num_action; i++) // Verify actions
     {
       fgets(buf, 512, fp_in);
@@ -73,30 +68,12 @@ uint32_t main(uint32_t argc, char** argv)
 
   FILE *fp_out = fopen(argv[2], "w");
   fwrite(&num_menu, sizeof(uint32_t), 1, fp_out);	// write number of menu items
-=======
- FILE *fp_out = fopen(argv[2], "w");
- fwrite(&num_menu, sizeof(uint32_t), 1, fp_out);	// write number of menu items
-
- FILE *img_out = tmpfile(); // Buffer file to store image binaries
- FILE *img;	// Pouint32_ts to the current image
- char byte_buf;
-
- uint32_t img_off; //image offset
->>>>>>> ca0f99fbb4d987681885badb1ea0332558cc339d
 
   FILE *img_out = tmpfile(); // Buffer file to store image binaries
   FILE *img;	// Pouint32_ts to the current image
   char byte_buf;
 
-<<<<<<< HEAD
   //uint32_t img_off = 2*num_menu + num_action_tot * sizeof(db_action_t); //image offset
-=======
- while(1)
- {
-  img_off = 0;
-  fgets(buf,512,fp_in);
-  if(feof(fp_in)) break; //Check for EOF
->>>>>>> ca0f99fbb4d987681885badb1ea0332558cc339d
 
   FILE *act_out = tmpfile(); // Buffer file for actions
 
@@ -104,7 +81,6 @@ uint32_t main(uint32_t argc, char** argv)
   {
     db_menuitem_t menuitem;
 
-<<<<<<< HEAD
     fgets(buf,512,fp_in);
     if(feof(fp_in)) break; //Check for EOF
 
@@ -150,23 +126,10 @@ uint32_t main(uint32_t argc, char** argv)
       
         fgets(buf, 512, fp_in);
         sscanf(buf, "%s %s %u %u %u", label, type, &pin, &pwm, &time);
-=======
-  //Write out menu_item
-  fwrite(&img_off, sizeof(uint32_t), 1, fp_out);
-  fwrite(&num_action, sizeof(uint32_t), 1, fp_out);
-
-  //Parse actions
-  uint32_t type_id;
-  for(i =0; i < num_action; i++)
-  {
-   fgets(buf, 512, fp_in);
-   sscanf(buf, "%s %s %d %d %d", &label, &type, &pin, &pwm, &time);
->>>>>>> ca0f99fbb4d987681885badb1ea0332558cc339d
 
         if(strcmp(type, "time") == 0) type_id = ACTION_SET_PIN_TIME;
         else if(strcmp(type, "moment") == 0 ) type_id = ACTION_SET_PIN_MOMENT;
         else if(strcmp(type, "perm") == 0) type_id = ACTION_SET_PIN_PERM;
-<<<<<<< HEAD
         else
         {
           fprintf(stderr, "Unexpected action type!\nType: %s\n",  type);
@@ -187,20 +150,6 @@ uint32_t main(uint32_t argc, char** argv)
         //fwrite(&pwm, sizeof(uint32_t), 1, act_out);
         //fwrite(&time, sizeof(uint32_t), 1, act_out);
     }
-=======
-             else
-             {
-              fprintf(stderr, "Unexpected action type!\nType: %s\n",  type);
-              return 1;
-             }
-   printf("Type id of %s is %d\n", type, type_id);
-
-   fwrite(&type_id, sizeof(uint32_t), 1, act_out);
-   fwrite(&pin, sizeof(uint32_t), 1, act_out);
-   fwrite(&pwm, sizeof(uint32_t), 1, act_out);
-   fwrite(&time, sizeof(uint32_t), 1, act_out);
-  }
->>>>>>> ca0f99fbb4d987681885badb1ea0332558cc339d
  }
  fclose(fp_in);
 

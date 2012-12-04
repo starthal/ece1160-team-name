@@ -49,7 +49,7 @@ int main(void)
   for (i = 0; i < num_menuitems; i++)
   {
     /* Read a menuitem */
-    db_menuitem_t *db_menuitem = (db_menuitem *) curptr;
+    db_menuitem_t *db_menuitem = (db_menuitem_t *) curptr;
     curptr += sizeof(db_menuitem_t);
     /* Debug */
     printf("Menuitem: icon=%ud, num_actions=%d\n",
@@ -64,13 +64,13 @@ int main(void)
   {
     printf("For menuitem %d\n", i);
     
-    for (j = 0; j < db_menuitems[i]->num_actions; j++)
+    for (j = 0; j < menu[i].num_actions; j++)
     {
       /* Read an action */
-      db_action_t *action = curptr;
+      db_action_t *action = (db_action_t *) curptr;
       curptr += sizeof(db_action_t);
 
-      menu[i].actions[j] = curptr;
+      menu[i].actions[j] = *action;
 
       printf("  Action: type=%d, pin=%d, val=%d, time=%d\n",
              action->type, action->pin, action->value, action->time);
@@ -81,7 +81,7 @@ int main(void)
   for (i = 0; i < num_menuitems; i++)
   {
     menu[i].icon = (uint8_t *) curptr;
-    curptr += db_menuitems[i]->icon_size;
+    curptr += menu[i].icon_size;
   }
 
 
