@@ -5,6 +5,7 @@
 #include "main.h"
 #include "action.h"
 #include "device.h"
+#include "usart.h"
 
 
 /* Status LED definitions */
@@ -60,35 +61,63 @@ int main(void)
 
   status_led_pattern = STATUS_LED_PATTERN_OK;
 
+#if 0
   delay(10);
   lcd_init();
   delay(10);
   lcd_fill(BLACK);
+#endif
   delay(10);
 
   uint8_t bval = 0, bval_old = 0;
 
   //action_next();
 
+  //usart_1_init(9600, USART_HardwareFlowControl_None);
+  delay(10);
+  
+  //while (1)
+  //{
+  //  usart_send_str(USART1, "Hello World\n");
+  //}
+
+  /* Get device profile from ROM */
+  //load_device_profile();
+  uint8_t addr = DRIVER_ADDR_ALLCALL; //led driver All Call
+  delay(50);
+
   i2c1_init();
 
+#if 1
+  delay(10);
+  i2c_start(I2C1, addr, I2C_Direction_Transmitter);
+  i2c_write(I2C1, DRIVER_MODE1);
+  i2c_write(I2C1, 0x01);
+  #if 1
+  i2c_stop(I2C1);
+  delay(10);
+  i2c_start(I2C1, addr, I2C_Direction_Transmitter);
+  i2c_write(I2C1, DRIVER_MODE2);
+  i2c_write(I2C1, 0x00);
+  #endif
+  i2c_stop(I2C1);
+  delay(10);
+#endif
+  
+  
   while (1)
   {
-    uint8_t addr = DRIVER_ADDR_ALLCALL; //led driver All Call
-
     i2c_start(I2C1, addr, I2C_Direction_Transmitter);
     i2c_write(I2C1, DRIVER_LED0_ON_H);
-    i2c_write(I2C1, 0x1F);
+    i2c_write(I2C1, 0x0F);
     i2c_stop(I2C1);
+    DelayResolution100us(100);
     
     i2c_start(I2C1, addr, I2C_Direction_Transmitter);
     i2c_write(I2C1, DRIVER_LED0_OFF_H);
     i2c_write(I2C1, 0x00);
     i2c_stop(I2C1);
-    
-    I2C_GenerateSTOP(I2C1, ENABLE);
-
-    delay(2);
+    delay(50);
   }
 
   while(1)
@@ -100,8 +129,7 @@ int main(void)
       //bval = GPIO_ReadInputDataBit(BUTTON_GPIO, BUTTON_PIN);
       if (1) //bval == 0 && bval_old == 1)
       {
-        /* Do some i2c shit */
-        
+        delay(10);
       }
       bval_old = bval;
     }

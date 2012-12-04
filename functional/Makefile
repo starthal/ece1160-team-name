@@ -68,7 +68,8 @@ SRC+=system_stm32f4xx.c
 SRC+=lcd.c
 SRC+=action.c
 SRC+=device.c
-#SRC+=usart.c
+SRC+=usart.c
+SRC+=w_utils.c
 
 #Newlib stubs for printf, etc
 #SRC+=newlib_stubs.c

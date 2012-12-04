@@ -1,4 +1,3 @@
-
 #include "stm32f4xx.h"
 
 void i2c1_init()
@@ -12,6 +11,7 @@ void i2c1_init()
   i2c_gpio_init_struct.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7;
   i2c_gpio_init_struct.GPIO_Mode = GPIO_Mode_AF;
   i2c_gpio_init_struct.GPIO_PuPd = GPIO_PuPd_NOPULL;
+  i2c_gpio_init_struct.GPIO_OType = GPIO_OType_OD;
   i2c_gpio_init_struct.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_Init(GPIOB, &i2c_gpio_init_struct);
 
@@ -22,7 +22,7 @@ void i2c1_init()
   I2C_InitTypeDef i2c_init_struct;
   i2c_init_struct.I2C_Mode = I2C_Mode_I2C;
   i2c_init_struct.I2C_DutyCycle = I2C_DutyCycle_2;
-  i2c_init_struct.I2C_ClockSpeed = 100000;
+  i2c_init_struct.I2C_ClockSpeed = 50000;
   i2c_init_struct.I2C_OwnAddress1 = 0x42;
   i2c_init_struct.I2C_Ack = I2C_Ack_Enable;
   i2c_init_struct.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;

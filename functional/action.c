@@ -1,7 +1,7 @@
 
 #include "lcd.h"
 #include "action.h"
-
+#include "device.h"
 #include "bitmap.c"
 
 uint8_t num_items = sizeof(icons) / sizeof(uint8_t *);
