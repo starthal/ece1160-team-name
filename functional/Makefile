@@ -42,15 +42,18 @@ INCLUDE=-I$(CURDIR)
 INCLUDE+=-I$(STMLIB)/core
 INCLUDE+=-I$(STMLIB)/stm32f4/inc
 INCLUDE+=-I$(STD_PERIPH)/inc
-#INCLUDE+=-I$(STMLIB)/STM32_USB_OTG_Driver/inc
-#INCLUDE+=-I$(STMLIB)/STM32_USB_Device_Library/Class/cdc/inc
-#INCLUDE+=-I$(STMLIB)/STM32_USB_Device_Library/Core/inc
+INCLUDE+=-I$(STMLIB)/STM32_USB_OTG_Driver/inc
+INCLUDE+=-I$(STMLIB)/STM32_USB_Device_Library/Class/cdc/inc
+INCLUDE+=-I$(STMLIB)/STM32_USB_Device_Library/Core/inc
 
 # vpath is used so object files are written to the current directory instead
 # of the same directory as their source files
 vpath %.c $(STD_PERIPH)/src \
-	$(STMLIB)/stm32f4/src \
-	$(OBJDIR)
+    $(STMLIB)/stm32f4/src \
+    $(STMLIB)/STM32_USB_OTG_Driver/src \
+    $(STMLIB)/STM32_USB_Device_Library/Class/cdc/src \
+    $(STMLIB)/STM32_USB_Device_Library/Core/src \
+    $(OBJDIR)
 vpath %.s $(STARTUP) \
 	$(OBJDIR)
 
@@ -70,6 +73,10 @@ SRC+=action.c
 SRC+=device.c
 SRC+=usart.c
 SRC+=w_utils.c
+#SRC+=vcp.c
+#SRC+=usb_bsp.c
+#SRC+=usbd_desc.c
+#SRC+=usbd_usr.c
 
 #Newlib stubs for printf, etc
 #SRC+=newlib_stubs.c

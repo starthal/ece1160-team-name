@@ -1,3 +1,6 @@
+#ifndef __LCD_H
+#define __LCD_H
+
 #include "stm32f4xx.h"
 //#include "nokia.h"
 
@@ -90,6 +93,10 @@ void lcd_bitmap_r66(uint8_t *data);
 void lcd_bitmap_rle(uint8_t* data);
 
 void clk_delay();
+
+uint8_t img_buf[132*132];
+
+#endif
 
 
 

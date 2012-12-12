@@ -41,4 +41,13 @@ typedef struct menuitem_s
   action_t actions[MAX_ACTIONS];
   uint8_t num_actions;
 } menuitem_t;
+
+
+void action_start();
+void action_stop();
+void action_disp();
+void action_next();
+
+extern uint8_t ind;
+
 #endif

@@ -25,6 +25,10 @@
 #include "stm32f4xx.h"
 #include "stm32f4xx_it.h"
 #include "main.h"
+//#include "usb_core.h"
+//#include "usbd_core.h"
+//#include "usbd_cdc_core.h"
+//#include "usb_dcd_int.h"
 //#include "main.h"
 //#include "usb_core.h"
 //#include "usbd_core.h"
@@ -181,6 +185,7 @@ void EXTI0_IRQHandler(void)
   //EXTI_ClearITPendingBit(USER_BUTTON_EXTI_LINE);
 }
 
+#if 0
 /**
   * @brief  This function handles EXTI15_10_IRQ Handler.
   * @param  None
@@ -188,15 +193,15 @@ void EXTI0_IRQHandler(void)
   */
 void OTG_FS_WKUP_IRQHandler(void)
 {
-  //if(USB_OTG_dev.cfg.low_power)
-  //{
+  if(usb_device.cfg.low_power)
+  {
 	/* Reset SLEEPDEEP and SLEEPONEXIT bits */
-	//SCB->SCR &= (uint32_t)~((uint32_t)(SCB_SCR_SLEEPDEEP_Msk | SCB_SCR_SLEEPONEXIT_Msk));
+	SCB->SCR &= (uint32_t)~((uint32_t)(SCB_SCR_SLEEPDEEP_Msk | SCB_SCR_SLEEPONEXIT_Msk));
 
 	/* After wake-up from sleep mode, reconfigure the system clock */
-	//SystemInit();
-  //  USB_OTG_UngateClock(&USB_OTG_dev);
-  //}
+	SystemInit();
+    USB_OTG_UngateClock(&usb_device);
+  }
   //EXTI_ClearITPendingBit(EXTI_Line18);
 }
 
@@ -207,5 +212,27 @@ void OTG_FS_WKUP_IRQHandler(void)
   */
 void OTG_FS_IRQHandler(void)
 {
-  //USBD_OTG_ISR_Handler (&USB_OTG_dev);
+  USBD_OTG_ISR_Handler (&usb_device);
 }
+#ifdef USB_OTG_HS_DEDICATED_EP1_ENABLED 
+/**
+  * @brief  This function handles EP1_IN Handler.
+  * @param  None
+  * @retval None
+  */
+void OTG_HS_EP1_IN_IRQHandler(void)
+{
+  USBD_OTG_EP1IN_ISR_Handler (&usb_device);
+}
+
+/**
+  * @brief  This function handles EP1_OUT Handler.
+  * @param  None
+  * @retval None
+  */
+void OTG_HS_EP1_OUT_IRQHandler(void)
+{
+  USBD_OTG_EP1OUT_ISR_Handler (&usb_device);
+}
+#endif
+#endif

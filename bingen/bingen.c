@@ -82,15 +82,15 @@ int main(int argc, char** argv)
     db_menuitem_t menuitem;
 
     fgets(buf,512,fp_in);
-    if(feof(fp_in)) break; //Check for EOF
+    if(feof(fp_in)) break; // Check for EOF
 
     sscanf(buf, "%s %s %u", label, type, &num_action);
     menuitem.num_actions = num_action;
 
     printf("Menu id: %s\n", type);
-    //Format should be OKAY so don't check
+    // Format should be OKAY so don't check
 
-    //Calculate image offset
+    // Calculate image offset
     strcat(type, ".bin");
     img = fopen(type, "rb");
     if (img == NULL)
@@ -105,55 +105,55 @@ int main(int argc, char** argv)
     rewind(img);
     while(1)
     {
-     fread(&byte_buf, 1, 1, img);
-     if(feof(img)) break;
-     fwrite(&byte_buf, 1, 1, img_out);
-     //img_off++;
+      fread(&byte_buf, 1, 1, img);
+      if(feof(img)) break;
+      fwrite(&byte_buf, 1, 1, img_out);
+      //img_off++;
     }
     fclose(img);
 
-    //Write out menu_item
+    // Write out menu_item
     printf("Writing menuitem at output offset %ld\n", ftell(fp_out));
     fwrite(&menuitem, sizeof(db_menuitem_t), 1, fp_out);
     //fwrite(&img_off, sizeof(uint32_t), 1, fp_out);
     //fwrite(&num_action, sizeof(uint32_t), 1, fp_out);
 
-    //Parse actions
+    // Parse actions
     uint32_t type_id;
     for(i =0; i < num_action; i++)
     {
       db_action_t action;
       
-        fgets(buf, 512, fp_in);
-        sscanf(buf, "%s %s %u %u %u", label, type, &pin, &pwm, &time);
+      fgets(buf, 512, fp_in);
+      sscanf(buf, "%s %s %u %u %u", label, type, &pin, &pwm, &time);
 
-        if(strcmp(type, "time") == 0) type_id = ACTION_SET_PIN_TIME;
-        else if(strcmp(type, "moment") == 0 ) type_id = ACTION_SET_PIN_MOMENT;
-        else if(strcmp(type, "perm") == 0) type_id = ACTION_SET_PIN_PERM;
-        else
-        {
-          fprintf(stderr, "Unexpected action type!\nType: %s\n",  type);
-          return 1;
-        }
-        printf("Type id of %s is %d\n", type, type_id);
+      if(strcmp(type, "time") == 0) type_id = ACTION_SET_PIN_TIME;
+      else if(strcmp(type, "moment") == 0 ) type_id = ACTION_SET_PIN_MOMENT;
+      else if(strcmp(type, "perm") == 0) type_id = ACTION_SET_PIN_PERM;
+      else
+      {
+        fprintf(stderr, "Unexpected action type!\nType: %s\n",  type);
+        return 1;
+      }
+      printf("Type id of %s is %d\n", type, type_id);
 
-        // Write action
-        action.type = type_id;
-        action.pin = pin;
-        action.value = pwm;
-        action.time = time;
+      // Write action
+      action.type = type_id;
+      action.pin = pin;
+      action.value = pwm;
+      action.time = time;
 
-        printf("Writing an action at act_out offset %ld\n", ftell(act_out));
-        fwrite(&action, sizeof(db_action_t), 1, act_out);
-        //fwrite(&type_id, sizeof(uint32_t), 1, act_out);
-        //fwrite(&pin, sizeof(uint32_t), 1, act_out);
-        //fwrite(&pwm, sizeof(uint32_t), 1, act_out);
-        //fwrite(&time, sizeof(uint32_t), 1, act_out);
+      printf("Writing an action at act_out offset %ld\n", ftell(act_out));
+      fwrite(&action, sizeof(db_action_t), 1, act_out);
+      //fwrite(&type_id, sizeof(uint32_t), 1, act_out);
+      //fwrite(&pin, sizeof(uint32_t), 1, act_out);
+      //fwrite(&pwm, sizeof(uint32_t), 1, act_out);
+      //fwrite(&time, sizeof(uint32_t), 1, act_out);
     }
  }
  fclose(fp_in);
 
-  //Write out actions
+  // Write out actions
   printf("Actions begin at offset %ld\n", ftell(fp_out));
   rewind(act_out);
   while(1)
@@ -164,7 +164,7 @@ int main(int argc, char** argv)
   }
   fclose(act_out);
 
-  //Write out images
+  // Write out images
   printf("Images begin at offset %ld\n", ftell(fp_out));
   rewind(img_out);
   while(1)
@@ -173,8 +173,8 @@ int main(int argc, char** argv)
     if(feof(img_out)) break;
     fwrite(&byte_buf, 1, 1, fp_out);
   }
-    fclose(img_out);
-    fclose(fp_out);
-
- return 0;
+  
+  fclose(img_out);
+  fclose(fp_out);
+  return 0;
 }

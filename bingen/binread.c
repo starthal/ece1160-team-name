@@ -35,7 +35,7 @@ int main(void)
 {
   uint32_t i, j;
   
-  /* Get the database */
+  /* Get the database */s
   void* db;
   db = bin_to_ram();
   void *curptr = db;
@@ -52,7 +52,7 @@ int main(void)
     db_menuitem_t *db_menuitem = (db_menuitem_t *) curptr;
     curptr += sizeof(db_menuitem_t);
     /* Debug */
-    printf("Menuitem: icon=%ud, num_actions=%d\n",
+    printf("Menuitem: icon=%u, num_actions=%u\n",
            db_menuitem->icon_size, db_menuitem->num_actions);
            
     menu[i].num_actions = db_menuitem->num_actions;
@@ -62,7 +62,7 @@ int main(void)
 
   for (i = 0; i < num_menuitems; i++)
   {
-    printf("For menuitem %d\n", i);
+    printf("For menuitem %u\n", i);
     
     for (j = 0; j < menu[i].num_actions; j++)
     {
@@ -72,7 +72,7 @@ int main(void)
 
       menu[i].actions[j] = *action;
 
-      printf("  Action: type=%d, pin=%d, val=%d, time=%d\n",
+      printf("  Action: type=%u, pin=%u, val=%u, time=%u\n",
              action->type, action->pin, action->value, action->time);
     }
   }

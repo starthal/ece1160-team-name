@@ -6,6 +6,10 @@
 #include "fonts.h"
 #include "main.h"
 
+/* Testing */
+#include "action.h"
+#include "device.h"
+
 /* 17.4 KB */
 uint8_t img_buf[132*132];
 
@@ -237,6 +241,7 @@ void lcd_fill(uint16_t color)
   lcd_send(LCD_DATA, 0);
   lcd_send(LCD_DATA, 131);
 
+
   /* Set color */
   uint32_t i;
 
@@ -255,8 +260,9 @@ void lcd_bitmap_rle(uint8_t* data)
   uint32_t i = 0, j = 0, k;
   uint8_t color = 0;
   uint8_t length = 1;
-  
-  while (length != 0 && i < (132*132))
+
+  i = 0;
+  while (length != 0 && j < (132*132))
   {
     length = data[i];
     color = data[i+1];
@@ -266,7 +272,7 @@ void lcd_bitmap_rle(uint8_t* data)
     }
     i+=2;
   }
-
+  
   lcd_bitmap_r132(img_buf);
 }
 

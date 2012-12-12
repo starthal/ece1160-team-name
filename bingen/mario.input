@@ -1,0 +1,16 @@
+menu_item arrow_up_right 2
+ action moment 3 4095 0
+ action moment 2 4095 0
+menu_item arrow_up 1
+ action moment 2 4095 0
+menu_item arrow_up_left 2
+ action moment 1 4095 0
+ action moment 2 4095 0
+menu_item arrow_down_left 2
+ action moment 1 4095 0
+ action moment 4 4095 0
+menu_item arrow_down 1
+ action moment 4 4095 0
+menu_item arrow_down_right 2
+ action moment 3 4095 0
+ action moment 4 4095 0
